@@ -64,7 +64,7 @@ provider "aws" {
 }
 
 module "register" {
-    source = "./modules/register"
+    source = "../modules/register"
     falcon_client_id  = local.falcon_client_id
     falcon_secret     = local.falcon_secret
     crowdstrike_cloud = local.crowdstrike_cloud
@@ -75,7 +75,7 @@ module "register" {
 }
 
 module "provision_1" {
-    source = "./modules/provision"
+    source = "../modules/provision"
     profile                 = local.root_account.profile
     intermediate_role       = module.register.registration_intermediate_role
     external_id             = module.register.registration_external_id
@@ -108,7 +108,7 @@ module "provision_1" {
 # }
 
 # module "provision_2" {
-#     source = "./modules/provision"
+#     source = "../modules/provision"
 #     profile           = local.account_2.profile
 #     intermediate_role = module.register.registration_intermediate_role
 #     external_id       = module.register.registration_external_id
