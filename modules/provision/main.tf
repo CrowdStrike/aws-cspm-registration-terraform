@@ -120,6 +120,7 @@ resource "aws_iam_role" "crowdstrike-eventbridge-role" {
 locals {
     target_id = "CrowdStrikeCentralizeEvents"
     rule_name = "cs-cloudtrail-events-ioa-rule"
+    ro_rule_name = "cs-cloudtrail-events-readonly-rule"
     eb_arn    = var.cs_eventbus_arn
 }
 
@@ -128,9 +129,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-af-south-1
     provider = aws.af-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -153,9 +175,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-east-1"
     provider = aws.ap-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -178,9 +221,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     provider = aws.ap-northeast-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -203,9 +267,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     provider = aws.ap-northeast-2
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -228,9 +313,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     provider = aws.ap-northeast-3
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -253,9 +359,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-south-1
     provider = aws.ap-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -278,9 +405,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southea
     provider = aws.ap-southeast-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -303,9 +451,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southea
     provider = aws.ap-southeast-2
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -328,9 +497,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ca-central
     provider = aws.ca-central-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -353,9 +543,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-central
     provider = aws.eu-central-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -378,9 +589,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-north-1
     provider = aws.eu-north-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -403,9 +635,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-south-1
     provider = aws.eu-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -428,9 +681,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-1"
     provider = aws.eu-west-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -453,9 +727,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-2"
     provider = aws.eu-west-2
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -478,9 +773,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-3"
     provider = aws.eu-west-3
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -503,9 +819,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-me-south-1
     provider = aws.me-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -528,9 +865,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-sa-east-1"
     provider = aws.sa-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -553,9 +911,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-1"
     provider = aws.us-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -578,9 +957,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-2"
     provider = aws.us-east-2
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -603,9 +1003,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-1"
     provider = aws.us-west-1
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -628,9 +1049,30 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-2"
     provider = aws.us-west-2
     name     = local.rule_name
     event_pattern = jsonencode({
-    detail-type = [
-        "AWS API Call via CloudTrail"
-    ]
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
     })
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
@@ -642,6 +1084,1541 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-wes
     target_id = local.target_id
     arn       = local.eb_arn
     rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-rule-us-west-2.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+# ReadOnly Rules
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-af-south-1" {
+    count    = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0
+    provider = aws.af-south-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-af-south-1" {
+    count     = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0 
+    provider  = aws.af-south-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-af-south-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-east-1" {
+    count    = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-east-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-east-1" {
+    count     = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-east-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-east-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-1" {
+    count    = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-northeast-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-1" {
+    count     = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-northeast-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-northeast-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-2" {
+    count    = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-northeast-2
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-2" {
+    count     = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-northeast-2
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-northeast-2.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-3" {
+    count    = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-northeast-3
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-3" {
+    count     = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-northeast-3
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-northeast-3.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-south-1" {
+    count    = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-south-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-south-1" {
+    count     = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-south-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-south-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-southeast-1" {
+    count    = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-southeast-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-southeast-1" {
+    count     = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-southeast-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-southeast-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-southeast-2" {
+    count    = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    provider = aws.ap-southeast-2
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-southeast-2" {
+    count     = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    provider  = aws.ap-southeast-2
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ap-southeast-2.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ca-central-1" {
+    count    = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    provider = aws.ca-central-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ca-central-1" {
+    count     = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.ca-central-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-ca-central-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-central-1" {
+    count    = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-central-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-central-1" {
+    count     = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-central-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-central-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-north-1" {
+    count    = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-north-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-north-1" {
+    count     = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-north-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-north-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-south-1" {
+    count    = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-south-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-south-1" {
+    count     = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-south-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-south-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-1" {
+    count    = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-west-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-1" {
+    count     = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-west-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-west-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-2" {
+    count    = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-west-2
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-2" {
+    count     = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-west-2
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-west-2.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-3" {
+    count    = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    provider = aws.eu-west-3
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-3" {
+    count     = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    provider  = aws.eu-west-3
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-eu-west-3.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-me-south-1" {
+    count    = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    provider = aws.me-south-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-me-south-1" {
+    count     = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.me-south-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-me-south-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-sa-east-1" {
+    count    = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    provider = aws.sa-east-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-sa-east-1" {
+    count     = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.sa-east-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-sa-east-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east-1" {
+    count    = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    provider = aws.us-east-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-east-1" {
+    count     = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.us-east-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-east-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east-2" {
+    count    = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    provider = aws.us-east-2
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-east-2" {
+    count     = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    provider  = aws.us-east-2
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-east-2.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west-1" {
+    count    = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    provider = aws.us-west-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-west-1" {
+    count     = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    provider  = aws.us-west-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-west-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west-2" {
+    count    = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    provider = aws.us-west-2
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-west-2" {
+    count     = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    provider  = aws.us-west-2
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-west-2.0.name
     role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
     depends_on = [
     aws_iam_role.crowdstrike-eventbridge-role
