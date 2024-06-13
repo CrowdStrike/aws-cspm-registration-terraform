@@ -109,3 +109,26 @@ module "provision_1" {
     aws = aws.account_1
   }
 }
+
+# Output Horizon registration response
+
+output "registration_iam_role" {
+  value = crowdstrike_horizon_aws_account.account.iam_role_arn
+  description = "IAM Role ARN in your account to enable IOM"
+}
+output "registration_intermediate_role" {
+  value = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+  description = "CrowdStrike IAM Role ARN in trust policy of your IAM Role to enable IOM"
+}
+output "registration_external_id" {
+  value = crowdstrike_horizon_aws_account.account.external_id
+  description = "External ID in trust policy of your IAM Role to enable IOM"
+}
+output "registration_cs_eventbus" {
+  value = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+  description = "CrowdStrike EventBus ARN to target from your EventBridge Rules to enable IOAs"
+}
+output "registration_cs_bucket_name" {
+  value = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+  description = "Name of CrowdStrike S3 Bucket to target from your CloudTrail to enable Read-Only IOAs (Optional)"
+}
