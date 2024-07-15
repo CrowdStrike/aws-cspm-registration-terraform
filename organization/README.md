@@ -13,24 +13,29 @@ root_account = {
 }
 ```
 
-2. Configure your CrowdStrike Falcon API keys.  These will be used to call registration API.  Required Scope: CSPM registration Read & Write
+2. Provide the AWS Organization ID
+```
+  organization_id = ""
+```
+
+3. Configure your CrowdStrike Falcon API keys.  These will be used to call registration API.  Required Scope: CSPM registration Read & Write
 ```
 falcon_client_id = ""
 falcon_secret = ""
 crowdstrike_cloud = "" us-1 or us-2 or eu-1
 ```
 
-3. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
+4. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
 ```
 enable_ioa = true
 ```
 
-4. Optional, change to false to add CloudTrail for Read Only IOAsS
+5. Optional, change to false to add CloudTrail for Read Only IOAsS
 ```
 use_existing_cloudtrail = true
 ```
 
-5. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
+6. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
 ```
 exclude_regions = [
     #us-east-1
@@ -57,12 +62,14 @@ provider "aws" {
 module "provision_2" {
     source = "./modules/provision"
     profile           = local.account_2.profile
-    intermediate_role = module.register.registration_intermediate_role
-    external_id       = module.register.registration_external_id
-    iam_role_arn      = module.register.registration_iam_role
-    cs_eventbus_arn   = module.register.registration_cs_eventbus    
-    enable_ioa        = local.enable_ioa
-    exclude_regions   = local.exclude_regions
+    intermediate_role       = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+    external_id             = crowdstrike_horizon_aws_account.account.external_id
+    iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
+    cs_eventbus_arn         = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    enable_ioa              = local.enable_ioa
+    exclude_regions         = local.exclude_regions
+    use_existing_cloudtrail = local.use_existing_cloudtrail
+    cs_bucket_name          = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
     providers = {
     aws = aws.account_2
   }
@@ -91,24 +98,16 @@ terraform destroy
 How It Works
 ------------
 
-This terraform configuration will leverage two modules: one to **register** the AWS Accounts and one to **provision** CSPM-required resources.
+This terraform configuration will leverage the Falcon Provider and one module:
 
-### register module
-This only applies to the AWS Organization Management Account
+### Falcon Provider
+This consumes the CrowdStrike Provider to register your AWS Organization and Management Account with CrowdStrike Falcon
 
-1. Install falconpy python package locally in /source
-2. Archive falconpy python package as zip for lambda layer
-3. Archive lambda.py fucntion as zip for lambda function
-4. Create AWS Secrets Manager Secret to store Falcon API Keys
-5. Create IAM Role to allow Lambda basic execution and access to Secret containing Falcon API Keys
-6. Create and invoke lambda function
-7. Lambda function leverages the CrowdStrike Falcon API to register the AWS Account with Horizon
-8. Lambda function returns API response and values to be used by provision module
-
-### provision module
+### Provision Module
 This applies to each account
 
 1. Create Read Only IAM Role to enable Indicators of Misconfiguration (IOM) Scans
+    1a. When this is applied to the AWS Management account, then you will see all AWS Accounts in the organization populate in Falcon.
 2. Create IAM Role to Allow Event Bridge rules to Put Events on CrowdStrike EventBus
 3. Create EventBridge Rules in each region which target CrowdStrike EventBus to forward IOAs
 4. Optional: For Org Management Account only, Create new Org-Wide CloudTrail with CrowdStrike S3 Bucket as Target to enable Read-Only IOAs

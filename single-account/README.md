@@ -59,14 +59,16 @@ terraform destroy
 How It Works
 ------------
 
-This terraform configuration will leverage two modules: one to **register** the AWS Accounts and one to **provision** CSPM-required resources.
+This terraform configuration will leverage the Falcon Provider and one module:
 
 ### Falcon Provider
-Registers your AWS Account with CrowdStrike Falcon Cloud Security
+This consumes the CrowdStrike Provider to register your AWS  Account with CrowdStrike Falcon
 
-### provision module
-Deploy resources to account
+### Provision Module
+This applies to each account
 
 1. Create Read Only IAM Role to enable Indicators of Misconfiguration (IOM) Scans
+    **Note**: When this is applied to the AWS Management account, then you will see all AWS Accounts in the organization populate in Falcon.
 2. Create IAM Role to Allow Event Bridge rules to Put Events on CrowdStrike EventBus
 3. Create EventBridge Rules in each region which target CrowdStrike EventBus to forward IOAs
+4. Optional: For Org Management Account only, Create new Org-Wide CloudTrail with CrowdStrike S3 Bucket as Target to enable Read-Only IOAs
