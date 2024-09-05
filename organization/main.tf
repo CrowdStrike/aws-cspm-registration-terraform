@@ -74,6 +74,8 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_partition" "current" {}
+
 provider "crowdstrike" {
   alias         = "falcon"
   client_id     = local.falcon_client_id
@@ -89,7 +91,7 @@ resource "crowdstrike_horizon_aws_account" "account" {
   is_commercial               = true
   behavior_assessment_enabled = local.enable_ioa
   sensor_management_enabled   = true
-  use_existing_cloudtrail     = local.use_existing_cloudtrail
+  # use_existing_cloudtrail     = local.use_existing_cloudtrail
   provider                    = crowdstrike.falcon
 }
 
@@ -100,10 +102,10 @@ locals {
 module "provision_1" {
     source = "../modules/provision"
     profile                 = local.root_account.profile
-    intermediate_role       = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+    intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
     external_id             = crowdstrike_horizon_aws_account.account.external_id
     iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-    cs_eventbus_arn         = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    cs_eventbus_arn         = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
     enable_ioa              = local.enable_ioa
     exclude_regions         = local.exclude_regions
     use_existing_cloudtrail = local.use_existing_cloudtrail
@@ -133,10 +135,10 @@ module "provision_1" {
 # module "provision_2" {
 #     source = "../modules/provision"
 #     profile           = local.account_2.profile
-#     intermediate_role       = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+#     intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
 #     external_id             = crowdstrike_horizon_aws_account.account.external_id
 #     iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-#     cs_eventbus_arn         = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+#     cs_eventbus_arn         = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
 #     enable_ioa              = local.enable_ioa
 #     exclude_regions         = local.exclude_regions
 #     use_existing_cloudtrail = local.use_existing_cloudtrail

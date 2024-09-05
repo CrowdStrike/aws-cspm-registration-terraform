@@ -71,6 +71,8 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_partition" "current" {}
+
 provider "crowdstrike" {
   alias         = "falcon"
   client_id     = local.falcon_client_id
@@ -96,10 +98,10 @@ locals {
 module "provision_1" {
   source = "../modules/provision"
   profile                 = local.account.profile
-  intermediate_role       = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+  intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
   external_id             = crowdstrike_horizon_aws_account.account.external_id
   iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-  cs_eventbus_arn         = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+  cs_eventbus_arn         = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
   enable_ioa              = local.enable_ioa
   exclude_regions         = local.exclude_regions
   use_existing_cloudtrail = local.use_existing_cloudtrail
@@ -117,7 +119,7 @@ output "registration_iam_role" {
   description = "IAM Role ARN in your account to enable IOM"
 }
 output "registration_intermediate_role" {
-  value = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+  value = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
   description = "CrowdStrike IAM Role ARN in trust policy of your IAM Role to enable IOM"
 }
 output "registration_external_id" {
@@ -125,7 +127,7 @@ output "registration_external_id" {
   description = "External ID in trust policy of your IAM Role to enable IOM"
 }
 output "registration_cs_eventbus" {
-  value = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+  value = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
   description = "CrowdStrike EventBus ARN to target from your EventBridge Rules to enable IOAs"
 }
 output "registration_cs_bucket_name" {
