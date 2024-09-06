@@ -97,7 +97,7 @@ locals {
     api_url                = (local.is_gov) ? (local.is_merlin ? "https://api.us-gov-2.crowdstrike.mil" : "https://api.laggar.gcw.crowdstrike.com") : "https://api.crowdstrike.com"
     crowdstrike_role_name  = local.is_gov ? "CrowdstrikeCSPMConnector" : "CrowdStrikeCSPMConnector"
     crowdstrike_account_id = (local.is_gov) ? (local.is_merlin ? "142028973013" : "358431324613") : "292230061137"
-    cs_eventbus_arn        = (local.is_gov) ? crowdstrike_horizon_aws_account.account.eventbus_name : "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    cs_eventbus_arn        = (local.is_gov) ? split(",", crowdstrike_horizon_aws_account.account.eventbus_name)[0] : "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
     iam_role_arn           = local.custom_role_name != "" ? format("arn:%s:iam::%s:role/%s", data.aws_partition.current.partition, data.aws_caller_identity.current.account_id, local.custom_role_name) : local.custom_role_name
 }
 
