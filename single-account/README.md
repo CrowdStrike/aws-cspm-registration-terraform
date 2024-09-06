@@ -17,20 +17,25 @@ root_account = {
 ```
 falcon_client_id = ""
 falcon_secret = ""
-crowdstrike_cloud = "" us-1 or us-2 or eu-1
+crowdstrike_cloud = "" us-1, us-2, eu-1, us-gov-1 or us-gov-2
 ```
 
-3. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
+3. OPTIONAL: Custom IAM Role name for CSPM ReadOnly Role.  Leave empty to use default role name from CrowdStrike API response.
+```
+  custom_role_name = ""
+```
+
+4. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
 ```
 enable_ioa = true
 ```
 
-4. Optional, change to false to add CloudTrail for Read Only IOAsS
+5. Optional, change to false to add CloudTrail for ReadOnly IOAs
 ```
 use_existing_cloudtrail = true
 ```
 
-5. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
+6. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
 ```
 exclude_regions = [
     #us-east-1
@@ -72,3 +77,9 @@ This applies to each account
 2. Create IAM Role to Allow Event Bridge rules to Put Events on CrowdStrike EventBus
 3. Create EventBridge Rules in each region which target CrowdStrike EventBus to forward IOAs
 4. Optional: For Org Management Account only, Create new Org-Wide CloudTrail with CrowdStrike S3 Bucket as Target to enable Read-Only IOAs
+
+GovCloud Support
+----------------
+
+This solution currently supports registering GovCloud AWS to GocCloud Falcon.  
+> **Note** <br> This solution does not currently support registering Commercial AWS to GovCLoud Falcon.

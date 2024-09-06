@@ -22,20 +22,25 @@ root_account = {
 ```
 falcon_client_id = ""
 falcon_secret = ""
-crowdstrike_cloud = "" us-1 or us-2 or eu-1
+crowdstrike_cloud = "" us-1, us-2, eu-1, us-gov-1 or us-gov-2
 ```
 
-4. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
+4. OPTIONAL: Custom IAM Role name for CSPM ReadOnly Role.  Leave empty to use default role name from CrowdStrike API response.
+```
+  custom_role_name = ""
+```
+
+5. Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
 ```
 enable_ioa = true
 ```
 
-5. Optional, change to false to add CloudTrail for Read Only IOAsS
+6. Optional, change to false to add CloudTrail for ReadOnly IOAs
 ```
 use_existing_cloudtrail = true
 ```
 
-6. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
+7. Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
 ```
 exclude_regions = [
     #us-east-1
@@ -62,14 +67,15 @@ provider "aws" {
 module "provision_2" {
     source = "./modules/provision"
     profile           = local.account_2.profile
-    intermediate_role       = "arn:aws:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+    intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
     external_id             = crowdstrike_horizon_aws_account.account.external_id
     iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-    cs_eventbus_arn         = "arn:aws:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    cs_eventbus_arn         = local.cs_eventbus_arn
     enable_ioa              = local.enable_ioa
     exclude_regions         = local.exclude_regions
     use_existing_cloudtrail = local.use_existing_cloudtrail
     cs_bucket_name          = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+    is_gov                  = local.is_gov
     providers = {
     aws = aws.account_2
   }
@@ -111,3 +117,9 @@ This applies to each account
 2. Create IAM Role to Allow Event Bridge rules to Put Events on CrowdStrike EventBus
 3. Create EventBridge Rules in each region which target CrowdStrike EventBus to forward IOAs
 4. Optional: For Org Management Account only, Create new Org-Wide CloudTrail with CrowdStrike S3 Bucket as Target to enable Read-Only IOAs
+
+GovCloud Support
+----------------
+
+This solution currently supports registering GovCloud AWS to GocCloud Falcon.  
+> **Note** <br> This solution does not currently support registering Commercial AWS to GovCLoud Falcon.
