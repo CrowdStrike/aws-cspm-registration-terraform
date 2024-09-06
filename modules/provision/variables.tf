@@ -18,6 +18,10 @@ variable "cs_eventbus_arn" {
     type = string
 }
 
+variable "is_gov" {
+  type = bool
+}
+
 # Set detection preferences
 variable "enable_ioa" {
   type = bool
