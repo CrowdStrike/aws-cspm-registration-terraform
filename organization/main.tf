@@ -91,11 +91,13 @@ provider "crowdstrike" {
   alias         = "falcon"
   client_id     = local.falcon_client_id
   client_secret = local.falcon_secret
+  url           = local.api_url
 }
 
 locals {
     is_merlin              = local.crowdstrike_cloud == "us-gov-2" ? true : false
     is_gov                 = strcontains(local.crowdstrike_cloud, "gov")
+    api_url                = (local.is_gov) ? (local.is_merlin ? "https://api.us-gov-2.crowdstrike.mil" : "https://api.laggar.gcw.crowdstrike.com") : "https://api.crowdstrike.com"
     crowdstrike_role_name  = local.is_gov ? "CrowdstrikeCSPMConnector" : "CrowdStrikeCSPMConnector"
     crowdstrike_account_id = (local.is_gov) ? (local.is_merlin ? "142028973013" : "358431324613") : "292230061137"
     cs_eventbus_arn        = (local.is_gov) ? crowdstrike_horizon_aws_account.account.eventbus_name : "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
