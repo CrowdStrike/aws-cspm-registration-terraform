@@ -13,8 +13,12 @@ terraform {
   }
 }
 
+##############################################
+### Modify locals for custom configuration ###
+##############################################
+
 locals {
-  # Configure AWS Organization Management Account credentials and region
+  # Configure Account credentials and region where profile = current AWS CLI profile
   root_account = {
     profile = "default"
     region  = "us-east-1"
@@ -26,12 +30,15 @@ locals {
   # Configure your CrowdStrike Falcon API keys.  These will be used to call registration API.  Required Scope: CSPM registration Read & Write
   falcon_client_id = ""
   falcon_secret = ""
-  crowdstrike_cloud = "us-1"
+  crowdstrike_cloud = "" # valid values inlcude: us-1, us-2, eu-1, us-gov-1, us-gov-2
+
+  # Custom IAM Role name for CSPM ReadOnly Role.  Leave empty to use default role name from CrowdStrike API response.
+  custom_role_name = ""
 
   # Enable Behavioral Assessment? If true, EventBridge rules will be deployed in each enabled region to forward indicators of attack (IOA) to CrowdStrike.
   enable_ioa = true
 
-  # Optional, change to false to add CloudTrail for Read Only IOAsS
+  # Optional, change to false to add CloudTrail for ReadOnly IOAs
   use_existing_cloudtrail = true
 
   # Uncomment regions to exclude from IOA Provisioning (EventBridge Rules).  This will be useful if your organization leverages SCPs to deny specific regions.
@@ -66,6 +73,10 @@ locals {
     ]
 }
 
+################################
+### End custom configuration ###
+################################
+
 provider "aws" {
   alias   = "account_1"
   region  = local.root_account.region
@@ -73,7 +84,7 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
-
+data "aws_region" "current" {}
 data "aws_partition" "current" {}
 
 provider "crowdstrike" {
@@ -82,34 +93,40 @@ provider "crowdstrike" {
   client_secret = local.falcon_secret
 }
 
+locals {
+    is_merlin              = local.crowdstrike_cloud == "us-gov-2" ? true : false
+    is_gov                 = strcontains(local.crowdstrike_cloud, "gov")
+    crowdstrike_role_name  = local.is_gov ? "CrowdstrikeCSPMConnector" : "CrowdStrikeCSPMConnector"
+    crowdstrike_account_id = (local.is_gov) ? (local.is_merlin ? "142028973013" : "358431324613") : "292230061137"
+    cs_eventbus_arn        = (local.is_gov) ? crowdstrike_horizon_aws_account.account.eventbus_name : "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    iam_role_arn           = local.custom_role_name != "" ? format("arn:%s:iam::%s:role/%s", data.aws_partition.current.partition, data.aws_caller_identity.current.account_id, local.custom_role_name) : local.custom_role_name
+}
 # Register AWS Organization with Falcon
 resource "crowdstrike_horizon_aws_account" "account" {
-  cloudtrail_region           = "us-east-1"
+  cloudtrail_region           = data.aws_region.current.name
   account_id                  = data.aws_caller_identity.current.account_id
   organization_id             = local.organization_id
   is_root                     = true
-  is_commercial               = true
+  is_commercial               = local.is_gov
   behavior_assessment_enabled = local.enable_ioa
   sensor_management_enabled   = true
-  # use_existing_cloudtrail     = local.use_existing_cloudtrail
   provider                    = crowdstrike.falcon
 }
 
-locals {
-    crowdstrike_account_id = 292230061137
-}
+# Onboard AWS Account
 
 module "provision_1" {
     source = "../modules/provision"
     profile                 = local.root_account.profile
-    intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
+    intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
     external_id             = crowdstrike_horizon_aws_account.account.external_id
     iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-    cs_eventbus_arn         = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
+    cs_eventbus_arn         = local.cs_eventbus_arn
     enable_ioa              = local.enable_ioa
     exclude_regions         = local.exclude_regions
     use_existing_cloudtrail = local.use_existing_cloudtrail
     cs_bucket_name          = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+    is_gov                  = local.is_gov
 
     providers = {
     aws = aws.account_1
@@ -135,15 +152,40 @@ module "provision_1" {
 # module "provision_2" {
 #     source = "../modules/provision"
 #     profile           = local.account_2.profile
-#     intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/CrowdStrikeCSPMConnector"
-#     external_id             = crowdstrike_horizon_aws_account.account.external_id
-#     iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
-#     cs_eventbus_arn         = "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_horizon_aws_account.account.eventbus_name}"
-#     enable_ioa              = local.enable_ioa
-#     exclude_regions         = local.exclude_regions
-#     use_existing_cloudtrail = local.use_existing_cloudtrail
-#     cs_bucket_name          = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+#     intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
+    # external_id             = crowdstrike_horizon_aws_account.account.external_id
+    # iam_role_arn            = crowdstrike_horizon_aws_account.account.iam_role_arn
+    # cs_eventbus_arn         = local.cs_eventbus_arn
+    # enable_ioa              = local.enable_ioa
+    # exclude_regions         = local.exclude_regions
+    # use_existing_cloudtrail = local.use_existing_cloudtrail
+    # cs_bucket_name          = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+    # is_gov                  = local.is_gov
 #     providers = {
 #     aws = aws.account_2
 #   }
 # }
+
+# Output Horizon registration response
+
+output "registration_iam_role" {
+  value = crowdstrike_horizon_aws_account.account.iam_role_arn
+  description = "IAM Role ARN in your account to enable IOM"
+}
+output "registration_intermediate_role" {
+  value = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
+  description = "CrowdStrike IAM Role ARN in trust policy of your IAM Role to enable IOM"
+}
+output "registration_external_id" {
+  value = crowdstrike_horizon_aws_account.account.external_id
+  description = "External ID in trust policy of your IAM Role to enable IOM"
+  sensitive = true
+}
+output "registration_cs_eventbus" {
+  value = local.cs_eventbus_arn
+  description = "CrowdStrike EventBus ARN to target from your EventBridge Rules to enable IOAs"
+}
+output "registration_cs_bucket_name" {
+  value = crowdstrike_horizon_aws_account.account.cloudtrail_bucket
+  description = "Name of CrowdStrike S3 Bucket to target from your CloudTrail to enable Read-Only IOAs (Optional)"
+}
