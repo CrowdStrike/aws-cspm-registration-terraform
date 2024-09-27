@@ -63,7 +63,7 @@ resource "aws_iam_role" "cs-iam-role" {
 }
 resource "aws_iam_role_policy_attachment" "cs-iam-role-attach" {
     role       = aws_iam_role.cs-iam-role.name
-    policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
+    policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/SecurityAudit"
 }
 
 # Behavior
@@ -125,7 +125,7 @@ locals {
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-af-south-1" {
-    count    = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.af-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -159,7 +159,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-af-south-1
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-af-south-1" {
-    count     = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0 
+    count     = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0 
     provider  = aws.af-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -171,7 +171,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-af-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-east-1" {
-    count    = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -205,7 +205,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-east-1"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-east-1" {
-    count     = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -217,7 +217,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-eas
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northeast-1" {
-    count    = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -251,7 +251,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-northeast-1" {
-    count     = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -263,7 +263,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-nor
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northeast-2" {
-    count    = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-2
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -297,7 +297,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-northeast-2" {
-    count     = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -309,7 +309,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-nor
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northeast-3" {
-    count    = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-3
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -343,7 +343,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-northea
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-northeast-3" {
-    count     = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-3
     target_id = local.target_id
     arn       = local.eb_arn
@@ -355,7 +355,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-nor
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-south-1" {
-    count    = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -389,7 +389,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-south-1
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-south-1" {
-    count     = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -401,7 +401,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southeast-1" {
-    count    = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-southeast-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -435,7 +435,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southea
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-southeast-1" {
-    count     = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-southeast-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -447,7 +447,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southeast-2" {
-    count    = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-southeast-2
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -481,7 +481,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ap-southea
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-southeast-2" {
-    count     = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-southeast-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -493,7 +493,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ap-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ca-central-1" {
-    count    = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ca-central-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -527,7 +527,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-ca-central
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ca-central-1" {
-    count     = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ca-central-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -539,7 +539,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ca-cen
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-central-1" {
-    count    = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-central-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -573,7 +573,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-central
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-central-1" {
-    count     = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-central-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -585,7 +585,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-cen
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-north-1" {
-    count    = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-north-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -619,7 +619,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-north-1
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-north-1" {
-    count     = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-north-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -631,7 +631,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-nor
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-south-1" {
-    count    = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -665,7 +665,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-south-1
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-south-1" {
-    count     = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -677,7 +677,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-1" {
-    count    = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -711,7 +711,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-1"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-west-1" {
-    count     = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -723,7 +723,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-wes
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-2" {
-    count    = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-2
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -757,7 +757,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-2"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-west-2" {
-    count     = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -769,7 +769,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-wes
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-3" {
-    count    = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-3
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -803,7 +803,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-eu-west-3"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-west-3" {
-    count     = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-3
     target_id = local.target_id
     arn       = local.eb_arn
@@ -815,7 +815,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-eu-wes
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-me-south-1" {
-    count    = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.me-south-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -849,7 +849,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-me-south-1
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-me-south-1" {
-    count     = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.me-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -861,7 +861,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-me-sou
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-sa-east-1" {
-    count    = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.sa-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -895,7 +895,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-sa-east-1"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-sa-east-1" {
-    count     = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.sa-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -907,7 +907,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-sa-eas
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-1" {
-    count    = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-east-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -941,7 +941,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-1"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-east-1" {
-    count     = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -953,7 +953,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-eas
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-2" {
-    count    = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-east-2
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -987,7 +987,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-east-2"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-east-2" {
-    count     = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-east-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -999,7 +999,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-eas
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-1" {
-    count    = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-west-1
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -1033,7 +1033,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-1"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-west-1" {
-    count     = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-west-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1045,7 +1045,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-wes
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-2" {
-    count    = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-west-2
     name     = local.rule_name
     event_pattern = jsonencode({
@@ -1079,7 +1079,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-west-2"
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-west-2" {
-    count     = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-west-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1093,7 +1093,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-wes
 # ReadOnly Rules
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-af-south-1" {
-    count    = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.af-south-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1154,7 +1154,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-af-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-af-south-1" {
-    count     = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa ? 1 : 0 
+    count     = contains(local.available_regions, "af-south-1") && !contains(var.exclude_regions, "af-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0 
     provider  = aws.af-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1166,7 +1166,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-af-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-east-1" {
-    count    = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-east-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1227,7 +1227,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-east
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-east-1" {
-    count     = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-east-1") && !contains(var.exclude_regions, "ap-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1239,7 +1239,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-1" {
-    count    = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1300,7 +1300,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-nort
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-1" {
-    count     = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-1") && !contains(var.exclude_regions, "ap-northeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1312,7 +1312,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-2" {
-    count    = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-2
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1373,7 +1373,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-nort
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-2" {
-    count     = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-2") && !contains(var.exclude_regions, "ap-northeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1385,7 +1385,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-northeast-3" {
-    count    = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-northeast-3
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1446,7 +1446,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-nort
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-northeast-3" {
-    count     = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-northeast-3") && !contains(var.exclude_regions, "ap-northeast-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-northeast-3
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1458,7 +1458,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-south-1" {
-    count    = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-south-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1519,7 +1519,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-south-1" {
-    count     = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-south-1") && !contains(var.exclude_regions, "ap-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1531,7 +1531,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-southeast-1" {
-    count    = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-southeast-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1592,7 +1592,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-southeast-1" {
-    count     = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-southeast-1") && !contains(var.exclude_regions, "ap-southeast-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-southeast-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1604,7 +1604,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-southeast-2" {
-    count    = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ap-southeast-2
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1665,7 +1665,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ap-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-southeast-2" {
-    count     = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ap-southeast-2") && !contains(var.exclude_regions, "ap-southeast-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ap-southeast-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1677,7 +1677,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ap-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ca-central-1" {
-    count    = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.ca-central-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1738,7 +1738,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-ca-cent
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ca-central-1" {
-    count     = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "ca-central-1") && !contains(var.exclude_regions, "ca-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.ca-central-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1750,7 +1750,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-ca-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-central-1" {
-    count    = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-central-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1811,7 +1811,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-cent
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-central-1" {
-    count     = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-central-1") && !contains(var.exclude_regions, "eu-central-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-central-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1823,7 +1823,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-north-1" {
-    count    = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-north-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1884,7 +1884,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-nort
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-north-1" {
-    count     = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-north-1") && !contains(var.exclude_regions, "eu-north-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-north-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1896,7 +1896,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-south-1" {
-    count    = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-south-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -1957,7 +1957,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-south-1" {
-    count     = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-south-1") && !contains(var.exclude_regions, "eu-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -1969,7 +1969,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-1" {
-    count    = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2030,7 +2030,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-1" {
-    count     = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-1") && !contains(var.exclude_regions, "eu-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2042,7 +2042,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-2" {
-    count    = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-2
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2103,7 +2103,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-2" {
-    count     = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-2") && !contains(var.exclude_regions, "eu-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2115,7 +2115,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west-3" {
-    count    = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.eu-west-3
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2176,7 +2176,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-eu-west
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-west-3" {
-    count     = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "eu-west-3") && !contains(var.exclude_regions, "eu-west-3") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.eu-west-3
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2188,7 +2188,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-eu-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-me-south-1" {
-    count    = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.me-south-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2249,7 +2249,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-me-sout
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-me-south-1" {
-    count     = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "me-south-1") && !contains(var.exclude_regions, "me-south-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.me-south-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2261,7 +2261,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-me-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-sa-east-1" {
-    count    = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.sa-east-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2322,7 +2322,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-sa-east
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-sa-east-1" {
-    count     = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "sa-east-1") && !contains(var.exclude_regions, "sa-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.sa-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2334,7 +2334,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-sa-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east-1" {
-    count    = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-east-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2395,7 +2395,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-east-1" {
-    count     = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-east-1") && !contains(var.exclude_regions, "us-east-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-east-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2407,7 +2407,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east-2" {
-    count    = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-east-2
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2468,7 +2468,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-east
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-east-2" {
-    count     = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-east-2") && !contains(var.exclude_regions, "us-east-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-east-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2480,7 +2480,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west-1" {
-    count    = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-west-1
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2541,7 +2541,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-west-1" {
-    count     = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-west-1") && !contains(var.exclude_regions, "us-west-1") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-west-1
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2553,7 +2553,7 @@ resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-
 }
 
 resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west-2" {
-    count    = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    count    = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider = aws.us-west-2
     name     = local.ro_rule_name
     event_pattern = jsonencode({
@@ -2614,7 +2614,7 @@ resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-west
     ]
 }
 resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-west-2" {
-    count     = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa ? 1 : 0
+    count     = contains(local.available_regions, "us-west-2") && !contains(var.exclude_regions, "us-west-2") && var.enable_ioa && !var.is_gov ? 1 : 0
     provider  = aws.us-west-2
     target_id = local.target_id
     arn       = local.eb_arn
@@ -2795,6 +2795,11 @@ provider "aws" {
     skip_requesting_account_id  = true
 }
 
+
+
+
+## GovCloud ##
+
 provider "aws" {
     profile                     = var.profile
     alias                       = "us-gov-west-1"
@@ -2809,4 +2814,244 @@ provider "aws" {
     region                      = "us-gov-east-1"
     skip_credentials_validation = true
     skip_requesting_account_id  = true
+}
+
+# EventBridge Rules
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-gov-west-1" {
+    count    = contains(local.available_regions, "us-gov-west-1") && !contains(var.exclude_regions, "us-gov-west-1") && var.enable_ioa && var.is_gov ? 1 : 0
+    provider = aws.us-gov-west-1
+    name     = local.rule_name
+    event_pattern = jsonencode({
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-gov-west-1" {
+    count     = contains(local.available_regions, "us-gov-west-1") && !contains(var.exclude_regions, "us-gov-west-1") && var.enable_ioa && var.is_gov ? 1 : 0 
+    provider  = aws.us-gov-west-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-rule-us-gov-west-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-gov-west-1" {
+    count    = contains(local.available_regions, "us-gov-west-1") && !contains(var.exclude_regions, "us-gov-west-1") && var.enable_ioa && var.is_gov ? 1 : 0
+    provider = aws.us-gov-west-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-gov-west-1" {
+    count     = contains(local.available_regions, "us-gov-west-1") && !contains(var.exclude_regions, "us-gov-west-1") && var.enable_ioa && var.is_gov ? 1 : 0 
+    provider  = aws.us-gov-west-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-gov-west-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-rule-us-gov-east-1" {
+    count    = contains(local.available_regions, "us-gov-east-1") && !contains(var.exclude_regions, "us-gov-east-1") && var.enable_ioa && var.is_gov ? 1 : 0
+    provider = aws.us-gov-east-1
+    name     = local.rule_name
+    event_pattern = jsonencode({
+        source = [
+            {
+                "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+                suffix = "via CloudTrail"
+            }
+        ],
+        detail = {
+            "eventName": [
+                {
+                    "anything-but": [
+                        "InvokeExecution",
+                        "Invoke",
+                        "UploadPart"
+                    ]
+                }
+            ],
+            "readOnly": [
+                false
+            ]
+        }
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-us-gov-east-1" {
+    count     = contains(local.available_regions, "us-gov-east-1") && !contains(var.exclude_regions, "us-gov-east-1") && var.enable_ioa && var.is_gov ? 1 : 0 
+    provider  = aws.us-gov-east-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-rule-us-gov-east-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+
+resource "aws_cloudwatch_event_rule" "crowdstrike-eventbus-event-ro-rule-us-gov-east-1" {
+    count    = contains(local.available_regions, "us-gov-east-1") && !contains(var.exclude_regions, "us-gov-east-1") && var.enable_ioa && var.is_gov ? 1 : 0
+    provider = aws.us-gov-east-1
+    name     = local.ro_rule_name
+    event_pattern = jsonencode({
+        source =  [
+            {
+            "prefix": "aws."
+            }
+        ],
+        detail-type = [
+            {
+            "suffix": "via CloudTrail"
+            }
+        ],
+        detail =  {
+            "readOnly": [
+                true
+            ]
+        },
+        "$or": [
+            {
+                "detail": {
+                    "eventName": [
+                        {
+                            "anything-but": [
+                                "GetObject",
+                                "Encrypt",
+                                "Decrypt",
+                                "HeadObject",
+                                "ListObjects",
+                                "GenerateDataKey",
+                                "Sign",
+                                "AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "detail": {
+                    "eventName": [
+                        "AssumeRole"
+                    ],
+                    "userIdentity": {
+                        "type": [
+                            {
+                                "anything-but": [
+                                    "AWSService"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    })
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
+}
+resource "aws_cloudwatch_event_target" "crowdstrike-eventbus-event-target-ro-us-gov-east-1" {
+    count     = contains(local.available_regions, "us-gov-east-1") && !contains(var.exclude_regions, "us-gov-east-1") && var.enable_ioa && var.is_gov ? 1 : 0 
+    provider  = aws.us-gov-east-1
+    target_id = local.target_id
+    arn       = local.eb_arn
+    rule      = aws_cloudwatch_event_rule.crowdstrike-eventbus-event-ro-rule-us-gov-east-1.0.name
+    role_arn  = aws_iam_role.crowdstrike-eventbridge-role.0.arn
+    depends_on = [
+    aws_iam_role.crowdstrike-eventbridge-role
+    ]
 }
