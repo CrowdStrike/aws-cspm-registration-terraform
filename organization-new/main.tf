@@ -18,10 +18,13 @@ terraform {
 
 locals {
   # Configure Account credentials and region where profile = current AWS CLI profile
-  account = {
+  root_account = {
     profile = "default"
     region  = "us-east-1"
   }
+
+  # Provide your AWS organization ID.  Eg. o-1qaz2wsx
+  organization_id = ""
 
   # Configure your CrowdStrike Falcon API keys.  These will be used to call registration API.  Required Scope: CSPM registration Read & Write
   falcon_client_id = ""
@@ -66,7 +69,7 @@ locals {
       # "me-south-1",
       # "me-central-1",
       # "sa-east-1"
-   ]
+    ]
 }
 
 ################################
@@ -75,8 +78,8 @@ locals {
 
 provider "aws" {
   alias   = "account_1"
-  region  = local.account.region
-  profile = local.account.profile
+  region  = local.root_account.region
+  profile = local.root_account.profile
 }
 
 data "aws_caller_identity" "current" {}
@@ -99,10 +102,10 @@ locals {
     cs_eventbus_arn        = (local.is_gov) ? split(",", crowdstrike_cloud_aws_account.account.eventbus_name)[0] : "arn:${data.aws_partition.current.partition}:events:us-east-1:${local.crowdstrike_account_id}:event-bus/${crowdstrike_cloud_aws_account.account.eventbus_name}"
     iam_role_arn           = local.custom_role_name != "" ? format("arn:%s:iam::%s:role/%s", data.aws_partition.current.partition, data.aws_caller_identity.current.account_id, local.custom_role_name) : local.custom_role_name
 }
-
-# Register AWS account with Falcon
-resource "crowdstrike_cloud_aws_account" "account" {
+# Register AWS Organization with Falcon
+resource "crowdstrike_cloud_aws_account" "org" {
   account_id      = data.aws_caller_identity.current.account_id
+  organization_id = local.organization_id
   account_type    = local.is_gov ? "gov" : "commercial"
 
   asset_inventory = {
@@ -129,24 +132,57 @@ resource "crowdstrike_cloud_aws_account" "account" {
 # Onboard AWS Account
 
 module "provision_1" {
-  source = "../modules/provision"
-  profile                 = local.account.profile
-  intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
-  external_id             = crowdstrike_cloud_aws_account.account.external_id
-  iam_role_arn            = crowdstrike_cloud_aws_account.account.iam_role_arn
-  cs_eventbus_arn         = local.cs_eventbus_arn
-  enable_ioa              = local.enable_ioa
-  exclude_regions         = local.exclude_regions
-  use_existing_cloudtrail = local.use_existing_cloudtrail
-  cs_bucket_name          = crowdstrike_cloud_aws_account.account.cloudtrail_bucket_name
-  is_gov                  = local.is_gov
+    source = "../modules/provision"
+    profile                 = local.root_account.profile
+    intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
+    external_id             = crowdstrike_cloud_aws_account.account.external_id
+    iam_role_arn            = crowdstrike_cloud_aws_account.account.iam_role_arn
+    cs_eventbus_arn         = local.cs_eventbus_arn
+    enable_ioa              = local.enable_ioa
+    exclude_regions         = local.exclude_regions
+    use_existing_cloudtrail = local.use_existing_cloudtrail
+    cs_bucket_name          = crowdstrike_cloud_aws_account.account.cloudtrail_bucket_name
+    is_gov                  = local.is_gov
 
-  providers = {
+    providers = {
     aws = aws.account_1
   }
 }
 
-# Output CrowdStrike registration response
+# Duplicate the following local, provider and module blocks to provision additional accounts
+# You will need to increment numeral values eg. account_2, provision_2, account_3, provision_3 etc
+
+# locals {
+#     account_2 = {
+#         profile = "profile2"
+#         region  = "us-east-1"
+#     }
+# }
+
+# provider "aws" {
+#   alias   = "account_2"
+#   region  = local.account_2.region
+#   profile = local.account_2.profile
+# }
+
+# module "provision_2" {
+#     source = "../modules/provision"
+#     profile           = local.account_2.profile
+#     intermediate_role       = "arn:${data.aws_partition.current.partition}:iam::${local.crowdstrike_account_id}:role/${local.crowdstrike_role_name}"
+    # external_id             = crowdstrike_cloud_aws_account.account.external_id
+    # iam_role_arn            = crowdstrike_cloud_aws_account.account.iam_role_arn
+    # cs_eventbus_arn         = local.cs_eventbus_arn
+    # enable_ioa              = local.enable_ioa
+    # exclude_regions         = local.exclude_regions
+    # use_existing_cloudtrail = local.use_existing_cloudtrail
+    # cs_bucket_name          = crowdstrike_cloud_aws_account.account.cloudtrail_bucket_name
+    # is_gov                  = local.is_gov
+#     providers = {
+#     aws = aws.account_2
+#   }
+# }
+
+# Output Horizon registration response
 
 output "registration_iam_role" {
   value = crowdstrike_cloud_aws_account.account.iam_role_arn

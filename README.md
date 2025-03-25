@@ -1,7 +1,19 @@
 > [!IMPORTANT]
-> This repo is being deprecated  
-> Please see the [Terraform Registry](https://registry.terraform.io/modules/CrowdStrike/cloud-registration/aws/latest)  
-> For the latest CrowdStrike Cloud Terraform Modules  
+> This repo is being deprecated!  
+> Please see the [Terraform Registry](https://registry.terraform.io/modules/CrowdStrike/cloud-registration/aws/latest) for or the latest CrowdStrike Cloud Terraform Modules  
+> and the new CrowdStrike Cloud Terraform Provider published [here](https://registry.terraform.io/providers/CrowdStrike/crowdstrike/latest).  
+> Please see the [Resource Documentation](https://github.com/CrowdStrike/terraform-provider-crowdstrike/blob/main/docs/resources/cloud_aws_account.md) for detailed usage and examples.  
+> This repo may still be used for examples to utilize both the legacy provider and new provider, but does not support latest CrowdStrike Cloud Terraform Modules.  It is recommended you use the latest [CrowdStrike Cloud Terraform Modules](https://registry.terraform.io/modules/CrowdStrike/cloud-registration/aws/latest).  
+
+## Using the new CrowdStrike Cloud Terraform Provider with this repo
+This directory now contains examples for both the legacy terraform provider and the new CrowdStrike Cloud Terraform Provider.
+- [Register Organization - New Provider](/organization-new/README.md)  
+- [Register Organization - Legacy Provider](/organization/README.md)  
+- [Register Single Account - New Provider](/single-account-new/README.md)  
+- [Register Single Account - Legacy Provider](/single-account/README.md)  
+
+##
+  
 
 ![](https://raw.githubusercontent.com/CrowdStrike/falconpy/main/docs/asset/cs-logo.png)
 
