@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> This repo is being deprecated  
+> Please see the [Terraform Registry](https://registry.terraform.io/modules/CrowdStrike/cloud-registration/aws/latest)  
+> For the latest CrowdStrike Cloud Terraform Modules  
+
 ## How to Register single Account
 
 Configure main.tf
