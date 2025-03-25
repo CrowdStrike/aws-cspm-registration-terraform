@@ -1,0 +1,45 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeRegions",
+                "sts:GetCallerIdentity"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole",
+                "iam:GetRole",
+                "events:DescribeRule",
+                "events:PutRule",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:ListInstanceProfilesForRole",
+                "events:PutTargets",
+                "events:DeleteRule",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:ListAttachedRolePolicies",
+                "events:ListTagsForResource",
+                "events:RemoveTargets",
+                "iam:ListRolePolicies",
+                "iam:GetRolePolicy",
+                "events:ListTargetsByRule"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/CrowdStrikeCSPMReader-*",
+                "arn:aws:iam::*:role/CrowdStrikeCSPMEventBridge",
+                "arn:aws:events:*:*:rule/cs-cloudtrail-events-ioa-rule",
+                "arn:aws:events:*:*:rule/cs-cloudtrail-events-readonly-rule"
+            ]
+        }
+    ]
+}
