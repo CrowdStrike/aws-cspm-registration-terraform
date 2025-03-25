@@ -103,6 +103,7 @@ locals {
 # Register AWS account with Falcon
 resource "crowdstrike_cloud_aws_account" "account" {
   account_id      = data.aws_caller_identity.current.account_id
+  account_type    = local.is_gov ? "gov" : "commercial"
 
   asset_inventory = {
     enabled = true
